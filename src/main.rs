@@ -1,43 +1,14 @@
 mod components;
 mod helpers;
 mod input_handlers;
+mod setup;
 
-use crate::{components::Grid, input_handlers::move_camera_with_arrow_keys};
-
-use bevy::{
-    app::PluginGroupBuilder,
-    color::palettes::css::LIGHT_GRAY,
-    input::{common_conditions::input_pressed, keyboard::keyboard_input_system},
-    prelude::*,
-    window::WindowResolution,
+use crate::{
+    components::{Grid, Player, Trap},
+    setup::{custom_default_plugins, spawn_camera},
 };
-use components::{Player, trap::Trap};
 
-fn custom_default_plugins() -> PluginGroupBuilder {
-    DefaultPlugins
-        .set(ImagePlugin::default())
-        .set(WindowPlugin {
-            primary_window: Some(Window {
-                title: String::from("jammi"),
-                resolution: WindowResolution::new(800.0, 800.0),
-                ..default()
-            }),
-            ..default()
-        })
-        .build()
-}
-
-fn spawn_camera(mut commands: Commands) {
-    commands.spawn((
-        Camera2d,
-        Camera {
-            is_active: true,
-            clear_color: ClearColorConfig::Custom(LIGHT_GRAY.into()),
-            ..default()
-        },
-        Transform::from_xyz(0.0, 0.0, 0.0),
-    ));
-}
+use bevy::{input::keyboard::keyboard_input_system, prelude::*};
 
 fn main() {
     App::new()
